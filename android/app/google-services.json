@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "594322798950",
+    "project_id": "plana-487e8",
+    "storage_bucket": "plana-487e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594322798950:android:d68d6789cda07ba584f0a7",
+        "android_client_info": {
+          "package_name": "com.collins.plana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "594322798950-625hcjjs86vu595cv2jbtp2v6q3dcu6f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmjmkS4MFJ1am2XqMCD9vfD3QosEHDTQ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "594322798950-625hcjjs86vu595cv2jbtp2v6q3dcu6f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
