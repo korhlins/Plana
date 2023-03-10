@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
-import 'package:plana/View/screen/home_screen.dart';
 
 class LargeButton extends StatelessWidget {
   String inputText;
@@ -20,12 +19,7 @@ class LargeButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(height * 0.07)),
       ),
-      onPressed: () {
-        onPress;
-        FocusScope.of(context).focusedChild?.unfocus();
-        Navigator.push(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
-      },
+      onPressed: onPress,
       child: Text(
         inputText,
         style: TextStyle(

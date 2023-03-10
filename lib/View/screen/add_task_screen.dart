@@ -4,8 +4,9 @@ import 'package:plana/View/components/small_card.dart';
 import 'package:plana/View/components/set_dateTime_container.dart';
 import 'package:plana/Model/Date_Utillities.dart';
 import 'package:plana/View/components/large_button.dart';
+import 'package:plana/View/screen/sign_in_screen.dart';
 
-enum TaskNatureList { family, entertainment, study, work, personal }
+enum TaskNatureList { family, entertainment, study, work, personal, Class }
 
 class AddTaskScreen extends StatefulWidget {
   static const String id = 'addTaskScreen';
@@ -227,13 +228,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     onTap: () {
                       setState(
                         () {
-                          taskNature = TaskNatureList.family;
+                          taskNature = TaskNatureList.Class;
                         },
                       );
                     },
                     textColor: const Color(0xFF61DDE2),
                     backgroundColor: const Color(0xFFDDF5F6),
-                    borderColor: taskNature == TaskNatureList.family
+                    borderColor: taskNature == TaskNatureList.Class
                         ? const Color(0xFF61DDE2)
                         : const Color(0xFFDDF5F6),
                   ),
@@ -283,7 +284,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ),
                 LargeButton(
                   inputText: '+ Add',
-                  onPress: () {},
+                  onPress: () {
+                    print('im good over here');
+                    Navigator.pushNamed(context, SignInScreen.id);
+                  },
                 )
               ],
             ),
