@@ -44,7 +44,7 @@ class SetDateTimeContainer extends StatelessWidget {
             padding: EdgeInsets.symmetric(
                 vertical: height * 0.009, horizontal: width * 0.03),
             decoration: BoxDecoration(
-                color: Color(0xFFF2F6FF),
+                color: const Color(0xFFF2F6FF),
                 borderRadius: BorderRadius.circular(height * 0.05)),
             height: height * 0.07,
             child: Center(

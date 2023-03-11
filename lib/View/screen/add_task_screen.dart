@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
 import 'package:plana/View/components/small_card.dart';
 import 'package:plana/View/components/set_dateTime_container.dart';
-import 'package:plana/Model/Date_Utillities.dart';
+import 'package:plana/View/utilities/Date_Utillities.dart';
 import 'package:plana/View/components/large_button.dart';
-import 'package:plana/View/screen/sign_in_screen.dart';
+import 'package:plana/View/screen/home_screen.dart';
+import 'package:plana/View-Model/task_card_data_provider.dart';
+import 'package:provider/provider.dart';
 
 enum TaskNatureList { family, entertainment, study, work, personal, Class }
 
@@ -17,8 +19,10 @@ class AddTaskScreen extends StatefulWidget {
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
   TaskNatureList? taskNature;
-  String startTime = DateUtillities().getTimeFormat(00, 00);
-  String endTime = DateUtillities().getTimeFormat(00, 00);
+  TextEditingController titleTextController = TextEditingController();
+  TextEditingController noteTextController = TextEditingController();
+  String startTime = DateUtillities().getTimeFormat(0, 0);
+  String endTime = DateUtillities().getTimeFormat(0, 0);
   String selectedDate = DateUtillities().getDateFormat(0, 0, 0);
 
   @override
@@ -69,6 +73,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   height: height * 0.02,
                 ),
                 TextField(
+                  controller: titleTextController,
                   enableSuggestions: true,
                   textAlign: TextAlign.start,
                   decoration: InputDecoration(
@@ -108,6 +113,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 TextField(
                   maxLines: 4,
                   maxLength: 250,
+                  controller: noteTextController,
                   enableSuggestions: true,
                   textAlign: TextAlign.start,
                   decoration: InputDecoration(
@@ -246,10 +252,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SetDateTimeContainer(
                     label: 'Start Time',
                     onConfirm: (date) {
-                      setState(() {
-                        startTime = DateUtillities()
-                            .getTimeFormat(date.hour, date.minute);
-                      });
+                      startTime = DateUtillities()
+                          .getTimeFormat(date.hour, date.minute);
                     },
                     dateTime: startTime,
                   ),
@@ -259,10 +263,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SetDateTimeContainer(
                     label: 'End Time',
                     onConfirm: (date) {
-                      setState(() {
-                        endTime = DateUtillities()
-                            .getTimeFormat(date.hour, date.minute);
-                      });
+                      endTime = DateUtillities()
+                          .getTimeFormat(date.hour, date.minute);
                     },
                     dateTime: endTime,
                   ),
@@ -273,10 +275,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 SetDateTimeContainer(
                     label: "Date",
                     onConfirm: (date) {
-                      setState(() {
-                        selectedDate = DateUtillities()
-                            .getDateFormat(date.day, date.month, date.year);
-                      });
+                      selectedDate = DateUtillities()
+                          .getDateFormat(date.day, date.month, date.year);
                     },
                     dateTime: selectedDate),
                 SizedBox(
@@ -285,8 +285,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 LargeButton(
                   inputText: '+ Add',
                   onPress: () {
-                    print('im good over here');
-                    Navigator.pushNamed(context, SignInScreen.id);
+                    context.read<TaskCardDataProvider>().addToTaskList(
+                          taskTitle: titleTextController.text,
+                          taskDescription: noteTextController.text,
+                          endTime: endTime,
+                          startTime: startTime,
+                        );
+                    Navigator.pushNamed(context, HomeScreen.id);
                   },
                 )
               ],

@@ -23,10 +23,6 @@ class SmallCard extends StatelessWidget {
 
     return OutlinedButton(
         onPressed: onTap,
-        child: Text(
-          cardChild,
-          style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
-        ),
         style: OutlinedButton.styleFrom(
             side: BorderSide(
                 color: borderColor,
@@ -36,6 +32,10 @@ class SmallCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(height * 0.03),
             ),
             backgroundColor: backgroundColor,
-            textStyle: TextStyle(color: textColor)));
+            textStyle: TextStyle(color: textColor)),
+        child: Text(
+          cardChild,
+          style: TextStyle(color: textColor, fontWeight: FontWeight.w500),
+        ));
   }
 }

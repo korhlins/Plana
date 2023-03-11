@@ -4,10 +4,11 @@ import 'package:plana/View/components/small_card.dart';
 import 'package:plana/View/screen/delete_task_screen.dart';
 import 'package:plana/View/screen/sign_in_screen.dart';
 import 'package:plana/View/utilities/media_Query.dart';
-import 'package:plana/Model/Date_Utillities.dart';
+import 'package:plana/View/utilities/Date_Utillities.dart';
 import 'package:date_utils/date_utils.dart' as Date_Utils;
 import 'package:plana/View/components/task_card.dart';
-import 'package:icons_plus/icons_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:plana/View-Model/task_card_data_provider.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 
 enum Views { todo, inProgress, done }
@@ -281,8 +282,27 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         ListView.builder(
+                          itemCount:
+                              context.read<TaskCardDataProvider>().itemCount,
                           itemBuilder: (context, index) {
-                            return TaskCard();
+                            return TaskCard(
+                              taskTitle: context
+                                  .read<TaskCardDataProvider>()
+                                  .task[index]
+                                  .taskTitle,
+                              taskDescription: context
+                                  .read<TaskCardDataProvider>()
+                                  .task[index]
+                                  .taskDescription,
+                              startTime: context
+                                  .read<TaskCardDataProvider>()
+                                  .task[index]
+                                  .startTime,
+                              endTime: context
+                                  .read<TaskCardDataProvider>()
+                                  .task[index]
+                                  .endTime,
+                            );
                           },
                         ),
                         Text('data'),

@@ -2,6 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
 
 class TaskCard extends StatelessWidget {
+  String taskTitle;
+  String taskDescription;
+  String startTime;
+  String endTime;
+
+  TaskCard(
+      {required this.taskTitle,
+      required this.taskDescription,
+      required this.startTime,
+      required this.endTime});
+
   @override
   Widget build(BuildContext context) {
     double height = ScreenDimension(context: context).getHeight();
@@ -10,7 +21,12 @@ class TaskCard extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("SelectedTime"),
+        Text(
+          "$startTime",
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         SizedBox(width: width * 0.01),
         Container(
           padding: EdgeInsets.symmetric(vertical: height * 0.015),
@@ -25,18 +41,23 @@ class TaskCard extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: height * 0.003, horizontal: width * 0.035),
-                child: Text("SelectedTasks"),
+                    vertical: height * 0.0032, horizontal: width * 0.035),
+                child: Text(
+                  taskTitle,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: height * 0.003, horizontal: width * 0.035),
-                child: Text("SelectedTasks"),
+                    vertical: height * 0.0032, horizontal: width * 0.035),
+                child: Text(taskDescription),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
-                    vertical: height * 0.003, horizontal: width * 0.035),
-                child: Text("SelectedTasks"),
+                    vertical: height * 0.0032, horizontal: width * 0.035),
+                child: Text("$startTime - $endTime"),
               ),
             ],
           ),
