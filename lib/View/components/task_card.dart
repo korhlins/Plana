@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
+import 'package:plana/View-Model/task_card_data_provider.dart';
+import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   String taskTitle;
@@ -23,7 +25,8 @@ class TaskCard extends StatelessWidget {
       children: [
         Text(
           "$startTime",
-          style: const TextStyle(
+          style: TextStyle(
+            color: context.watch<TaskCardDataProvider>().getBorderColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -33,7 +36,7 @@ class TaskCard extends StatelessWidget {
           margin: EdgeInsets.all(height * 0.008),
           width: width * 0.62,
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
+            color: context.watch<TaskCardDataProvider>().getCardColor,
             borderRadius: BorderRadius.circular(height * 0.03),
           ),
           child: Column(
@@ -44,7 +47,8 @@ class TaskCard extends StatelessWidget {
                     vertical: height * 0.0032, horizontal: width * 0.035),
                 child: Text(
                   taskTitle,
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: context.watch<TaskCardDataProvider>().getBorderColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -52,12 +56,19 @@ class TaskCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: height * 0.0032, horizontal: width * 0.035),
-                child: Text(taskDescription),
+                child: Text(
+                  taskDescription,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: height * 0.0032, horizontal: width * 0.035),
-                child: Text("$startTime - $endTime"),
+                child: Text(
+                  "$startTime - $endTime",
+                  style: const TextStyle(
+                      color: Colors.black45, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

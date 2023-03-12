@@ -21,9 +21,17 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TaskNatureList? taskNature;
   TextEditingController titleTextController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
-  String startTime = DateUtillities().getTimeFormat(0, 0);
-  String endTime = DateUtillities().getTimeFormat(0, 0);
-  String selectedDate = DateUtillities().getDateFormat(0, 0, 0);
+  Color? cardColor;
+  String startTime = '';
+  String endTime = '';
+  String selectedDate = '';
+
+  @override
+  void dispose() {
+    context.read<TaskCardDataProvider>().resetDateTime();
+    // TODO: implement dispose
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,16 +152,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SmallCard(
                     cardChild: 'Family',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.family;
-                        },
-                      );
+                      taskNature = TaskNatureList.family;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFDDF5F6),
+                          cardTextTitleColor: const Color(0xFF61DDE2));
                     },
                     textColor: const Color(0xFF61DDE2),
                     backgroundColor: const Color(0xFFDDF5F6),
                     borderColor: taskNature == TaskNatureList.family
-                        ? const Color(0xFF61DDE2)
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFDDF5F6),
                   ),
                   SizedBox(
@@ -162,16 +169,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SmallCard(
                     cardChild: 'Entertainment',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.entertainment;
-                        },
-                      );
+                      taskNature = TaskNatureList.entertainment;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFFAE3DD),
+                          cardTextTitleColor: const Color(0xFFFCA696));
                     },
                     textColor: const Color(0xFFFCA696),
                     backgroundColor: const Color(0xFFFAE3DD),
                     borderColor: taskNature == TaskNatureList.entertainment
-                        ? const Color(0xFFFCA696)
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFFAE3DD),
                   ),
                   SizedBox(
@@ -180,16 +186,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SmallCard(
                     cardChild: 'Study',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.study;
-                        },
-                      );
+                      taskNature = TaskNatureList.study;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFEAF2FF),
+                          cardTextTitleColor: Colors.blueAccent);
                     },
                     textColor: Colors.blueAccent,
                     backgroundColor: const Color(0xFFEAF2FF),
                     borderColor: taskNature == TaskNatureList.study
-                        ? Colors.blueAccent
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFEAF2FF),
                   ),
                   SizedBox(
@@ -198,16 +203,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SmallCard(
                     cardChild: 'Work',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.work;
-                        },
-                      );
+                      taskNature = TaskNatureList.work;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFFAE3DD),
+                          cardTextTitleColor: const Color(0xFFFCA696));
                     },
                     textColor: const Color(0xFFFCA696),
                     backgroundColor: const Color(0xFFFAE3DD),
                     borderColor: taskNature == TaskNatureList.work
-                        ? const Color(0xFFFCA696)
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFFAE3DD),
                   ),
                   SizedBox(
@@ -216,32 +220,30 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SmallCard(
                     cardChild: 'Personal',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.personal;
-                        },
-                      );
+                      taskNature = TaskNatureList.personal;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFEAF2FF),
+                          cardTextTitleColor: Colors.blueAccent);
                     },
                     textColor: Colors.blueAccent,
                     backgroundColor: const Color(0xFFEAF2FF),
                     borderColor: taskNature == TaskNatureList.personal
-                        ? Colors.blueAccent
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFEAF2FF),
                   ),
                   SizedBox(width: width * 0.02),
                   SmallCard(
                     cardChild: 'class',
                     onTap: () {
-                      setState(
-                        () {
-                          taskNature = TaskNatureList.Class;
-                        },
-                      );
+                      taskNature = TaskNatureList.Class;
+                      context.read<TaskCardDataProvider>().setColor(
+                          cardBackgroundColor: const Color(0xFFDDF5F6),
+                          cardTextTitleColor: const Color(0xFF61DDE2));
                     },
                     textColor: const Color(0xFF61DDE2),
                     backgroundColor: const Color(0xFFDDF5F6),
                     borderColor: taskNature == TaskNatureList.Class
-                        ? const Color(0xFF61DDE2)
+                        ? context.watch<TaskCardDataProvider>().getBorderColor
                         : const Color(0xFFDDF5F6),
                   ),
                 ]),
@@ -254,8 +256,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     onConfirm: (date) {
                       startTime = DateUtillities()
                           .getTimeFormat(date.hour, date.minute);
+                      context
+                          .read<TaskCardDataProvider>()
+                          .setStartTime(startTime);
                     },
-                    dateTime: startTime,
+                    dateTime: context
+                        .watch<TaskCardDataProvider>()
+                        .getPickedStartTime,
                   ),
                   SizedBox(
                     width: width * 0.08,
@@ -265,8 +272,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     onConfirm: (date) {
                       endTime = DateUtillities()
                           .getTimeFormat(date.hour, date.minute);
+                      context.read<TaskCardDataProvider>().setEndTime(endTime);
                     },
-                    dateTime: endTime,
+                    dateTime:
+                        context.watch<TaskCardDataProvider>().getPickedEndTime,
                   ),
                 ]),
                 SizedBox(
@@ -277,8 +286,12 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     onConfirm: (date) {
                       selectedDate = DateUtillities()
                           .getDateFormat(date.day, date.month, date.year);
+                      context
+                          .read<TaskCardDataProvider>()
+                          .setDate(selectedDate);
                     },
-                    dateTime: selectedDate),
+                    dateTime:
+                        context.watch<TaskCardDataProvider>().getPickedDate),
                 SizedBox(
                   height: height * 0.09,
                 ),
