@@ -28,7 +28,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   @override
   void dispose() {
-    context.read<TaskCardDataProvider>().resetDateTime();
     // TODO: implement dispose
     super.dispose();
   }
@@ -303,7 +302,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           taskDescription: noteTextController.text,
                           endTime: endTime,
                           startTime: startTime,
+                          cardTextTitleColor: context
+                              .read<TaskCardDataProvider>()
+                              .getBorderColor,
+                          cardColor:
+                              context.read<TaskCardDataProvider>().cardColor,
                         );
+                    context.read<TaskCardDataProvider>().resetDateTime();
                     Navigator.pushNamed(context, HomeScreen.id);
                   },
                 )

@@ -9,6 +9,8 @@ import 'package:plana/View/screen/delete_task_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:plana/View-Model/task_card_data_provider.dart';
+import 'package:plana/View-Model/sign_in_provider.dart';
+import 'package:plana/View-Model/page_view_management_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +22,15 @@ class Plana extends StatelessWidget {
   final user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<TaskCardDataProvider>(
-      create: (BuildContext context) => TaskCardDataProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<TaskCardDataProvider>(
+            create: (BuildContext context) => TaskCardDataProvider()),
+        ChangeNotifierProvider<PageViewManagementProvider>(
+            create: (BuildContext context) => PageViewManagementProvider()),
+        ChangeNotifierProvider<SignInAndOutProvider>(
+            create: (BuildContext context) => SignInAndOutProvider()),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: user != null ? HomeScreen.id : SignInScreen.id,

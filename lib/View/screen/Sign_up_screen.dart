@@ -7,6 +7,8 @@ import 'package:plana/View/screen/sign_in_screen.dart';
 import 'package:plana/View/screen/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:plana/View-Model/sign_in_provider.dart';
 import 'package:modal_progress_hud_alt/modal_progress_hud_alt.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -19,8 +21,6 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController controller = TextEditingController();
   final _auth = FirebaseAuth.instance;
-  bool passwordVisible = true;
-  bool showSpinner = false;
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: ModalProgressHUD(
-        inAsyncCall: showSpinner,
+        inAsyncCall: context.watch<SignInAndOutProvider>().getSpinnerAction,
         child: SafeArea(
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
@@ -67,16 +67,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   TextFields(
                     hintText: 'password',
                     controller: passwordController,
-                    passwordVisible: passwordVisible,
+                    passwordVisible: context
+                        .watch<SignInAndOutProvider>()
+                        .getPasswordVisibility,
                     suffixIcon: IconButton(
                       color: Colors.black26,
-                      icon: Icon(passwordVisible
+                      icon: Icon(context
+                              .watch<SignInAndOutProvider>()
+                              .getPasswordVisibility
                           ? Icons.visibility_off
                           : Icons.visibility),
                       onPressed: () {
-                        setState(() {
-                          passwordVisible = !passwordVisible;
-                        });
+                        context.read<SignInAndOutProvider>().toggleVisibility();
                       },
                     ),
                   ),
@@ -87,24 +89,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     inputText: 'Create account',
                     onPress: () async {
                       FocusScope.of(context).focusedChild?.unfocus();
-                      setState(() {
-                        showSpinner = true;
-                      });
+                      context
+                          .read<SignInAndOutProvider>()
+                          .setUserName(controller.text);
+                      context
+                          .read<SignInAndOutProvider>()
+                          .setSpinnerAction(true);
                       try {
                         final newUser =
                             await _auth.createUserWithEmailAndPassword(
                                 email: emailController.text,
                                 password: passwordController.text);
+
                         if (newUser != null) {
-                          setState(() {
-                            showSpinner = false;
-                          });
+                          context
+                              .read<SignInAndOutProvider>()
+                              .setSpinnerAction(false);
                           Navigator.pushNamed(context, HomeScreen.id);
                         }
                       } catch (e) {
-                        setState(() {
-                          showSpinner = false;
-                        });
+                        context
+                            .read<SignInAndOutProvider>()
+                            .setSpinnerAction(false);
                         Navigator.pushNamed(context, SignUpScreen.id);
                       }
                     },

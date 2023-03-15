@@ -67,13 +67,15 @@ class TaskCardDataProvider extends ChangeNotifier {
       {required String startTime,
       required String taskTitle,
       required String endTime,
-      dynamic taskCategory,
+      required Color cardTextTitleColor,
+      required cardColor,
       required String taskDescription}) {
     task.add(TaskCardModel(
         startTime: startTime,
         endTime: endTime,
         taskTitle: taskTitle,
-        taskCategory: taskCategory,
+        cardTextTitleColor: cardTextTitleColor,
+        cardColor: cardColor,
         taskDescription: taskDescription));
     notifyListeners();
   }

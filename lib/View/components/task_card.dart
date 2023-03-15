@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
-import 'package:plana/View-Model/task_card_data_provider.dart';
-import 'package:provider/provider.dart';
 
 class TaskCard extends StatelessWidget {
   String taskTitle;
   String taskDescription;
   String startTime;
   String endTime;
+  Color cardTextTitleColor;
+  Color cardColor;
 
   TaskCard(
       {required this.taskTitle,
       required this.taskDescription,
       required this.startTime,
+      required this.cardColor,
+      required this.cardTextTitleColor,
       required this.endTime});
 
   @override
@@ -26,7 +28,7 @@ class TaskCard extends StatelessWidget {
         Text(
           "$startTime",
           style: TextStyle(
-            color: context.watch<TaskCardDataProvider>().getBorderColor,
+            color: cardTextTitleColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -36,7 +38,7 @@ class TaskCard extends StatelessWidget {
           margin: EdgeInsets.all(height * 0.008),
           width: width * 0.62,
           decoration: BoxDecoration(
-            color: context.watch<TaskCardDataProvider>().getCardColor,
+            color: cardColor,
             borderRadius: BorderRadius.circular(height * 0.03),
           ),
           child: Column(
@@ -48,7 +50,7 @@ class TaskCard extends StatelessWidget {
                 child: Text(
                   taskTitle,
                   style: TextStyle(
-                    color: context.watch<TaskCardDataProvider>().getBorderColor,
+                    color: cardTextTitleColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

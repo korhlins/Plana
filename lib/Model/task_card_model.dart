@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class TaskCardModel {
   String startTime;
   String endTime;
-  dynamic taskCategory;
+  Color cardColor;
+  Color cardTextTitleColor;
   String taskTitle;
   String taskDescription;
 
@@ -11,6 +12,7 @@ class TaskCardModel {
       {required this.startTime,
       required this.endTime,
       required this.taskTitle,
-      required this.taskCategory,
+      required this.cardTextTitleColor,
+      required this.cardColor,
       required this.taskDescription});
 }
