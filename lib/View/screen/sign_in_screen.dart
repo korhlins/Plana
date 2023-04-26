@@ -21,7 +21,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  bool passwordVisible = true;
+  // bool passwordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     TextFields(
                       hintText: 'Email',
-                      passwordVisible: false,
                       inputTextType: TextInputType.emailAddress,
                       controller: emailController,
                     ),

@@ -13,6 +13,7 @@ import 'package:plana/View-Model/task_card_data_provider.dart';
 import 'package:plana/View-Model/page_view_management_provider.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:plana/View/utilities/enums.dart';
+import 'package:plana/Services/local_database.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'HomeScreen';
@@ -28,6 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int selectedIndex = 0;
   late List<DateTime> daysInMonth;
   PageController pageController = PageController();
+
+  void _refreshTasks() async {
+    final taskData = await DatabaseHelper.query();
+    taskData;
+  }
 
   @override
   void initState() {

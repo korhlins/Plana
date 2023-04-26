@@ -5,14 +5,14 @@ class TextFields extends StatelessWidget {
   TextFields({
     required this.hintText,
     this.controller,
-    required this.passwordVisible,
+    this.passwordVisible,
     this.suffixIcon,
     this.inputTextType,
   });
 
   String? hintText;
   TextEditingController? controller;
-  bool passwordVisible;
+  bool? passwordVisible;
   IconButton? suffixIcon;
   TextInputType? inputTextType;
 
@@ -25,7 +25,7 @@ class TextFields extends StatelessWidget {
       controller: controller,
       enableSuggestions: true,
       textAlign: TextAlign.start,
-      obscureText: passwordVisible,
+      obscureText: passwordVisible!,
       obscuringCharacter: '*',
       decoration: InputDecoration(
         hintText: hintText,
