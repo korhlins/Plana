@@ -7,6 +7,7 @@ class TaskCardModel {
   Color cardTextTitleColor;
   String taskTitle;
   String taskDescription;
+  int? index;
 
   TaskCardModel(
       {required this.startTime,
@@ -14,5 +15,6 @@ class TaskCardModel {
       required this.taskTitle,
       required this.cardTextTitleColor,
       required this.cardColor,
-      required this.taskDescription});
+      required this.taskDescription,
+      required this.index});
 }

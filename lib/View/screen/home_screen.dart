@@ -17,6 +17,10 @@ import 'package:plana/Services/local_database.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'HomeScreen';
+  static int? cardId;
+  static void refreshTasks() async {
+    await DatabaseHelper.query();
+  }
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -30,11 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<DateTime> daysInMonth;
   PageController pageController = PageController();
 
-  void _refreshTasks() async {
-    final taskData = await DatabaseHelper.query();
-    taskData;
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -42,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
     daysInMonth = Date_Utils.DateUtils.daysInRange(DateTime.now(),
             Date_Utils.DateUtils.daysInMonth(DateTime.now()).last)
         .toList();
+    HomeScreen.refreshTasks();
   }
 
   @override
@@ -363,6 +363,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<TaskCardDataProvider>()
                                   .task[index]
                                   .endTime,
+                              index: index,
+                              updateFunction: () {
+                                HomeScreen.cardId =
+                                    DatabaseHelper.cardDetails[index]["id"];
+                                Navigator.pushNamed(context, AddTaskScreen.id);
+                              },
                             );
                           },
                         ),

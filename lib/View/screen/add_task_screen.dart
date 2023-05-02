@@ -7,6 +7,7 @@ import 'package:plana/View/components/large_button.dart';
 import 'package:plana/View/screen/home_screen.dart';
 import 'package:plana/View-Model/task_card_data_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:plana/Services/local_database.dart';
 
 enum TaskNatureList { family, entertainment, study, work, personal, Class }
 
@@ -25,11 +26,26 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String startTime = '';
   String endTime = '';
   String selectedDate = '';
+  int? cardId = HomeScreen.cardId;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (cardId != null) {
+      final updatingItem = DatabaseHelper.cardDetails
+          .firstWhere((element) => element["id"] == cardId);
+      titleTextController.text = updatingItem["taskTitle"];
+      noteTextController.text = updatingItem["taskDescription"];
+    }
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    titleTextController.dispose();
+    noteTextController.dispose();
   }
 
   @override
@@ -295,21 +311,32 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   height: height * 0.09,
                 ),
                 LargeButton(
-                  inputText: '+ Add',
+                  inputText: cardId == null ? "+ Add" : "Update",
                   onPress: () {
-                    context.read<TaskCardDataProvider>().addToTaskList(
+                    if (cardId == null) {
+                      DatabaseHelper.insert(
                           taskTitle: titleTextController.text,
                           taskDescription: noteTextController.text,
-                          endTime: endTime,
                           startTime: startTime,
+                          endTime: endTime,
                           cardTextTitleColor: context
                               .read<TaskCardDataProvider>()
                               .getBorderColor,
                           cardColor:
-                              context.read<TaskCardDataProvider>().cardColor,
-                        );
-                    context.read<TaskCardDataProvider>().resetDateTime();
-                    Navigator.pushNamed(context, HomeScreen.id);
+                              context.read<TaskCardDataProvider>().cardColor);
+                      HomeScreen.refreshTasks();
+                      context.read<TaskCardDataProvider>().resetDateTime();
+                      Navigator.pushNamed(context, HomeScreen.id);
+                    }
+                    DatabaseHelper.update(
+                        cardId!,
+                        titleTextController.text,
+                        noteTextController.text,
+                        startTime,
+                        endTime,
+                        context.read<TaskCardDataProvider>().getBorderColor,
+                        context.read<TaskCardDataProvider>().cardColor!);
+                    HomeScreen.refreshTasks();
                   },
                 )
               ],
