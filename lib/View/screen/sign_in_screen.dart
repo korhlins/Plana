@@ -69,6 +69,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     TextFields(
                       hintText: 'Email',
                       inputTextType: TextInputType.emailAddress,
+                      passwordVisible: context
+                          .read<SignInAndOutProvider>()
+                          .getPasswordVisibility,
                       controller: emailController,
                     ),
                     SizedBox(

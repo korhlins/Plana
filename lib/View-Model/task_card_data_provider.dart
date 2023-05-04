@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:plana/Model/task_card_model.dart';
 import 'package:plana/View/screen/home_screen.dart';
 import 'package:plana/View/utilities/Date_Utillities.dart';
-import 'package:plana/Services/local_database.dart';
+import '../Services/local_database.dart';
 
 class TaskCardDataProvider extends ChangeNotifier {
   List<TaskCardModel> task = [];
-  List<Map<String, dynamic>> cardDetails = DatabaseHelper.cardDetails;
-  int indexOfUpdatedCard = 0;
+  List<Map<String, dynamic>> cardDetails = [];
+  int? indexOfUpdatedCard = HomeScreen.selectedIndex;
 
   String startTime = DateUtillities().getTimeFormat(0, 0);
   String endTime = DateUtillities().getTimeFormat(0, 0);
@@ -69,30 +69,33 @@ class TaskCardDataProvider extends ChangeNotifier {
 
   void addToTaskList() async {
     cardDetails = await DatabaseHelper.query();
+    // print(cardDetails.length);
     task.add(TaskCardModel(
         index: null,
-        startTime: cardDetails[cardDetails.length]["startTime"],
-        endTime: cardDetails[cardDetails.length]["endTime"],
-        taskTitle: cardDetails[cardDetails.length]["taskTitle"],
-        cardTextTitleColor: cardDetails[cardDetails.length]
-            ["cardTextTitleColor"],
-        cardColor: cardDetails[cardDetails.length]["cardColor"],
-        taskDescription: cardDetails[cardDetails.length]["taskDescription"]));
+        startTime: cardDetails[HomeScreen.addedCardIndex]["startTime"],
+        endTime: cardDetails[HomeScreen.addedCardIndex]["endTime"],
+        taskTitle: cardDetails[HomeScreen.addedCardIndex]["taskTitle"],
+        cardTextTitleColor:
+            Color(cardDetails[HomeScreen.addedCardIndex]["cardTextTitleColor"]),
+        cardColor: Color(cardDetails[HomeScreen.addedCardIndex]["cardColor"]),
+        taskDescription: cardDetails[HomeScreen.addedCardIndex]
+            ["taskDescription"]));
     notifyListeners();
   }
 
   void updateCard() async {
-    final updateCardDetails = await DatabaseHelper.getItem(HomeScreen.cardId!);
+    final updateCardDetails = await DatabaseHelper.getItem(HomeScreen.cardId);
     TaskCardModel taskUpdate =
-        task.firstWhere((element) => element.index == indexOfUpdatedCard);
-    taskUpdate.startTime = updateCardDetails[indexOfUpdatedCard]["startTime"];
-    taskUpdate.endTime = updateCardDetails[indexOfUpdatedCard]["endTime"];
-    taskUpdate.taskTitle = updateCardDetails[indexOfUpdatedCard]["taskTitle"];
+        task.firstWhere((element) => element == indexOfUpdatedCard);
+    taskUpdate.startTime = updateCardDetails[indexOfUpdatedCard!]["startTime"];
+    taskUpdate.endTime = updateCardDetails[indexOfUpdatedCard!]["endTime"];
+    taskUpdate.taskTitle = updateCardDetails[indexOfUpdatedCard!]["taskTitle"];
     taskUpdate.cardTextTitleColor =
-        updateCardDetails[indexOfUpdatedCard]["cardTextTitleColor"];
-    taskUpdate.cardColor = updateCardDetails[indexOfUpdatedCard]["cardColor"];
+        updateCardDetails[indexOfUpdatedCard!]["cardTextTitleColor"];
+    taskUpdate.cardColor = updateCardDetails[indexOfUpdatedCard!]["cardColor"];
     taskUpdate.taskDescription =
-        updateCardDetails[indexOfUpdatedCard]["taskDescription"];
+        updateCardDetails[indexOfUpdatedCard!]["taskDescription"];
+    print(cardDetails.length);
     notifyListeners();
   }
 }

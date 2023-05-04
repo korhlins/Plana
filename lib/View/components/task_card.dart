@@ -8,7 +8,7 @@ class TaskCard extends StatelessWidget {
   String endTime;
   Color cardTextTitleColor;
   Color cardColor;
-  int index;
+  static int? index;
   Function() updateFunction;
 
   TaskCard(
@@ -18,7 +18,6 @@ class TaskCard extends StatelessWidget {
       required this.cardColor,
       required this.cardTextTitleColor,
       required this.endTime,
-      required this.index,
       required this.updateFunction});
 
   @override

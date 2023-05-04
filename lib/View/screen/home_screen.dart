@@ -18,9 +18,11 @@ import 'package:plana/Services/local_database.dart';
 class HomeScreen extends StatefulWidget {
   static const String id = 'HomeScreen';
   static int? cardId;
-  static void refreshTasks() async {
-    await DatabaseHelper.query();
-  }
+  static int? selectedIndex;
+  static int addedCardIndex = 0;
+  // static void refreshTasks() async {
+  //   await DatabaseHelper.query();
+  // }
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentPage = 0;
   int selectedIndex = 0;
   late List<DateTime> daysInMonth;
+  List<Map<String, dynamic>> cardDetails = [];
   PageController pageController = PageController();
 
   @override
@@ -41,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     daysInMonth = Date_Utils.DateUtils.daysInRange(DateTime.now(),
             Date_Utils.DateUtils.daysInMonth(DateTime.now()).last)
         .toList();
-    HomeScreen.refreshTasks();
+    // HomeScreen.refreshTasks();
   }
 
   @override
@@ -338,6 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount:
                               context.read<TaskCardDataProvider>().itemCount,
                           itemBuilder: (context, index) {
+                            HomeScreen.addedCardIndex = index;
                             return TaskCard(
                               taskTitle: context
                                   .read<TaskCardDataProvider>()
@@ -363,10 +367,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<TaskCardDataProvider>()
                                   .task[index]
                                   .endTime,
-                              index: index,
-                              updateFunction: () {
-                                HomeScreen.cardId =
-                                    DatabaseHelper.cardDetails[index]["id"];
+                              updateFunction: () async {
+                                HomeScreen.selectedIndex = index;
+                                cardDetails = await DatabaseHelper.query();
+                                HomeScreen.cardId = cardDetails[index]["id"];
                                 Navigator.pushNamed(context, AddTaskScreen.id);
                               },
                             );
