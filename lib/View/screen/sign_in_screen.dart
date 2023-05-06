@@ -129,6 +129,9 @@ class _SignInScreenState extends State<SignInScreen> {
                             Navigator.pushNamed(context, HomeScreen.id);
                           } catch (e) {
                             Navigator.pushNamed(context, SignUpScreen.id);
+                            context
+                                .read<SignInAndOutProvider>()
+                                .setSpinnerAction(false);
                           }
                         }),
                     SizedBox(

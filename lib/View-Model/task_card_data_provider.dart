@@ -8,6 +8,9 @@ class TaskCardDataProvider extends ChangeNotifier {
   List<TaskCardModel> task = [];
   List<Map<String, dynamic>> cardDetails = [];
   int? indexOfUpdatedCard = HomeScreen.selectedIndex;
+  void refreshTasks() async {
+    cardDetails = await DatabaseHelper.query();
+  }
 
   String startTime = DateUtillities().getTimeFormat(0, 0);
   String endTime = DateUtillities().getTimeFormat(0, 0);
@@ -69,17 +72,18 @@ class TaskCardDataProvider extends ChangeNotifier {
 
   void addToTaskList() async {
     cardDetails = await DatabaseHelper.query();
-    // print(cardDetails.length);
-    task.add(TaskCardModel(
-        index: null,
-        startTime: cardDetails[HomeScreen.addedCardIndex]["startTime"],
-        endTime: cardDetails[HomeScreen.addedCardIndex]["endTime"],
-        taskTitle: cardDetails[HomeScreen.addedCardIndex]["taskTitle"],
-        cardTextTitleColor:
-            Color(cardDetails[HomeScreen.addedCardIndex]["cardTextTitleColor"]),
-        cardColor: Color(cardDetails[HomeScreen.addedCardIndex]["cardColor"]),
-        taskDescription: cardDetails[HomeScreen.addedCardIndex]
-            ["taskDescription"]));
+    task = List.generate(
+        cardDetails.length,
+        (index) => TaskCardModel(
+            id: cardDetails[index]["id"],
+            startTime: cardDetails[index]["startTime"],
+            endTime: cardDetails[index]["endTime"],
+            date: cardDetails[index]["date"],
+            taskTitle: cardDetails[index]["taskTitle"],
+            cardTextTitleColor: Color(cardDetails[index]["cardTextTitleColor"]),
+            cardColor: Color(cardDetails[index]["cardColor"]),
+            taskDescription: cardDetails[index]["taskDescription"]));
+    print(task.length);
     notifyListeners();
   }
 
@@ -95,7 +99,7 @@ class TaskCardDataProvider extends ChangeNotifier {
     taskUpdate.cardColor = updateCardDetails[indexOfUpdatedCard!]["cardColor"];
     taskUpdate.taskDescription =
         updateCardDetails[indexOfUpdatedCard!]["taskDescription"];
-    print(cardDetails.length);
+
     notifyListeners();
   }
 }

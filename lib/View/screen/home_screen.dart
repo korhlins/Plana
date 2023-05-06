@@ -20,9 +20,6 @@ class HomeScreen extends StatefulWidget {
   static int? cardId;
   static int? selectedIndex;
   static int addedCardIndex = 0;
-  // static void refreshTasks() async {
-  //   await DatabaseHelper.query();
-  // }
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -44,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
     daysInMonth = Date_Utils.DateUtils.daysInRange(DateTime.now(),
             Date_Utils.DateUtils.daysInMonth(DateTime.now()).last)
         .toList();
-    // HomeScreen.refreshTasks();
   }
 
   @override

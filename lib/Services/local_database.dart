@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:plana/Model/task_card_model.dart';
 
 class DatabaseHelper {
   static Database? _db;
@@ -21,37 +22,24 @@ class DatabaseHelper {
       taskDescription TEXT,
       startTime TEXT,
       endTime TEXT,
+      date TEXT,
       cardColor INTEGER,
       cardTextTitleColor INTEGER,
       createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)""");
       });
-      print(_db?.isOpen);
     } catch (e) {
       print(e);
     }
   }
 
-  Future<int?> insert(
-      {required String taskTitle,
-      required String taskDescription,
-      required String startTime,
-      required String endTime,
-      int? cardTextTitleColor,
-      int? cardColor}) async {
-    final data = {
-      "taskTitle": taskTitle,
-      "taskDescription": taskDescription,
-      "startTime": startTime,
-      "endTime": endTime,
-      "cardColor": cardColor,
-      "cardTextTitleColor": cardTextTitleColor,
-    };
-    print(data["taskTitle"]);
-    return await _db?.insert(_tableName, data);
+  static Future<void> insert(TaskCardModel taskCard) async {
+    await _db?.insert(_tableName, taskCard.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<List<Map<String, dynamic>>> query() async {
     List<Map<String, Object?>> tasks = await _db!.query(_tableName);
+    print(tasks.length);
     return tasks;
   }
 
@@ -61,26 +49,9 @@ class DatabaseHelper {
     return task;
   }
 
-  static Future<int> update(
-      int? id,
-      String taskTitle,
-      String taskDescription,
-      String startTime,
-      String endTime,
-      int cardTextTitleColor,
-      int cardColor) async {
-    final data = {
-      "taskTitle": taskTitle,
-      "taskDescription": taskDescription,
-      "startTime": startTime,
-      "endTime": endTime,
-      "cardColor": cardColor,
-      "cardTextTitleColor": cardTextTitleColor,
-      "createAt": DateTime.now().toString()
-    };
-    final task =
-        await _db!.update(_tableName, data, where: "id = ?", whereArgs: [id]);
-    return task;
+  static Future<void> update(TaskCardModel taskCard) async {
+    await _db!.update(_tableName, taskCard.toMap(),
+        where: "id = ?", whereArgs: [taskCard.id]);
   }
 
   static Future<void> delete(int id) async {

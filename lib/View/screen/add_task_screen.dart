@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:plana/Model/task_card_model.dart';
 import 'package:plana/View/utilities/media_Query.dart';
 import 'package:plana/View/components/small_card.dart';
 import 'package:plana/View/components/set_dateTime_container.dart';
@@ -27,6 +28,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   String endTime = '';
   String selectedDate = '';
   int? cardId = HomeScreen.cardId;
+  int id = 0;
   List<Map<String, dynamic>> cardDetails = [];
 
   // void getAllData() async {
@@ -40,6 +42,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   //         cardDetails.firstWhere((element) => element["id"] == cardId);
   //     titleTextController.text = updatingItem["taskTitle"];
   //     noteTextController.text = updatingItem["taskDescription"];
+  //     startTime = updatingItem["startTime"];
+  //     endTime = updatingItem["endTime"];
+  //     selectedDate = updatingItem["date"];
+  //     cardColor = context.read<TaskCardDataProvider>().cardColor;
   //   }
   // }
 
@@ -325,26 +331,22 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   LargeButton(
                     inputText: cardId == null ? "+ Add" : "Update",
                     onPress: () async {
+                      id += 1;
                       if (cardId == null) {
-                        DatabaseHelper().insert(
-                            taskTitle: titleTextController.text,
-                            taskDescription: noteTextController.text,
+                        DatabaseHelper.insert(TaskCardModel(
+                            id: id,
                             startTime: startTime,
                             endTime: endTime,
+                            taskTitle: titleTextController.text,
                             cardTextTitleColor: context
-                                    .read<TaskCardDataProvider>()
-                                    .getBorderColor
-                                    .value ??
-                                Colors.blueAccent.value,
-                            cardColor: context
                                 .read<TaskCardDataProvider>()
-                                .cardColor!
-                                .value);
-                        // HomeScreen.refreshTasks();
+                                .getBorderColor,
+                            cardColor:
+                                context.read<TaskCardDataProvider>().cardColor!,
+                            taskDescription: noteTextController.text,
+                            date: selectedDate));
                         context.read<TaskCardDataProvider>().resetDateTime();
                         context.read<TaskCardDataProvider>().addToTaskList();
-                        // getAllData();
-                        // print(cardDetails.length);
                         Navigator.pushNamed(context, HomeScreen.id);
                       }
                       // DatabaseHelper.update(
@@ -362,7 +364,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       //         .cardColor!
                       //         .value);
                       // context.read<TaskCardDataProvider>().updateCard();
-                      // HomeScreen.refreshTasks();
                     },
                   )
                 ],

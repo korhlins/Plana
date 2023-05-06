@@ -8,12 +8,13 @@ import 'package:plana/View/screen/add_task_screen.dart';
 import 'package:plana/View/screen/delete_task_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:plana/View-Model/task_card_data_provider.dart';
 import 'package:plana/View-Model/sign_in_provider.dart';
 import 'package:plana/View-Model/page_view_management_provider.dart';
+import 'package:plana/Services/local_database.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper.db();
   await Firebase.initializeApp();
   runApp(Plana());
 }
