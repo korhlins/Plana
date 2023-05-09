@@ -23,37 +23,36 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   TaskNatureList? taskNature;
   TextEditingController titleTextController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
-  Color? cardColor;
   String startTime = '';
   String endTime = '';
   String selectedDate = '';
-  int? cardId = HomeScreen.cardId;
-  int id = 0;
+  int? cardId;
   List<Map<String, dynamic>> cardDetails = [];
 
-  // void getAllData() async {
-  //   cardDetails = await DatabaseHelper.query();
-  // }
-  //
-  // void getData() {
-  //   if (cardId != null) {
-  //     getAllData();
-  //     final updatingItem =
-  //         cardDetails.firstWhere((element) => element["id"] == cardId);
-  //     titleTextController.text = updatingItem["taskTitle"];
-  //     noteTextController.text = updatingItem["taskDescription"];
-  //     startTime = updatingItem["startTime"];
-  //     endTime = updatingItem["endTime"];
-  //     selectedDate = updatingItem["date"];
-  //     cardColor = context.read<TaskCardDataProvider>().cardColor;
-  //   }
-  // }
+  void getData() async {
+    if (cardId != null) {
+      try {
+        final updatingItem = await DatabaseHelper.getItem(cardId);
+        titleTextController.text = updatingItem[0]["taskTitle"];
+        noteTextController.text = updatingItem[0]["taskDescription"];
+        startTime = updatingItem[0]["startTime"];
+        endTime = updatingItem[0]["endTime"];
+        selectedDate = updatingItem[0]["date"];
+        context
+            .read<TaskCardDataProvider>()
+            .setCardBorderColor(updatingItem[0]["cardTextTitleColor"]);
+      } catch (e) {
+        print(e);
+      }
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getData();
+    cardId = HomeScreen.cardId;
+    getData();
   }
 
   @override
@@ -331,10 +330,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   LargeButton(
                     inputText: cardId == null ? "+ Add" : "Update",
                     onPress: () async {
-                      id += 1;
+                      context.read<TaskCardDataProvider>().setCardId();
                       if (cardId == null) {
                         DatabaseHelper.insert(TaskCardModel(
-                            id: id,
+                            id: context.read<TaskCardDataProvider>().getCardId,
                             startTime: startTime,
                             endTime: endTime,
                             taskTitle: titleTextController.text,
@@ -348,22 +347,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         context.read<TaskCardDataProvider>().resetDateTime();
                         context.read<TaskCardDataProvider>().addToTaskList();
                         Navigator.pushNamed(context, HomeScreen.id);
+                      } else {
+                        DatabaseHelper.update(TaskCardModel(
+                            id: cardId!,
+                            startTime: startTime,
+                            endTime: endTime,
+                            taskTitle: titleTextController.text,
+                            cardTextTitleColor: context
+                                .read<TaskCardDataProvider>()
+                                .getBorderColor,
+                            cardColor:
+                                context.read<TaskCardDataProvider>().cardColor!,
+                            taskDescription: noteTextController.text,
+                            date: selectedDate));
+                        Navigator.pushNamed(context, HomeScreen.id);
                       }
-                      // DatabaseHelper.update(
-                      //     cardId,
-                      //     titleTextController.text,
-                      //     noteTextController.text,
-                      //     startTime,
-                      //     endTime,
-                      //     context
-                      //         .read<TaskCardDataProvider>()
-                      //         .getBorderColor
-                      //         .value,
-                      //     context
-                      //         .read<TaskCardDataProvider>()
-                      //         .cardColor!
-                      //         .value);
-                      // context.read<TaskCardDataProvider>().updateCard();
                     },
                   )
                 ],

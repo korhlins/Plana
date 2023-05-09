@@ -19,7 +19,6 @@ class HomeScreen extends StatefulWidget {
   static const String id = 'HomeScreen';
   static int? cardId;
   static int? selectedIndex;
-  static int addedCardIndex = 0;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -29,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> todoList = [];
   final iconList = <IconData>[Icons.view_cozy, Icons.delete_rounded];
   int currentPage = 0;
-  int selectedIndex = 0;
+
   late List<DateTime> daysInMonth;
   List<Map<String, dynamic>> cardDetails = [];
   PageController pageController = PageController();
@@ -41,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
     daysInMonth = Date_Utils.DateUtils.daysInRange(DateTime.now(),
             Date_Utils.DateUtils.daysInMonth(DateTime.now()).last)
         .toList();
+    context.read<TaskCardDataProvider>().refreshTasks();
   }
 
   @override
@@ -335,9 +335,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         ListView.builder(
                           itemCount:
-                              context.read<TaskCardDataProvider>().itemCount,
+                              context.watch<TaskCardDataProvider>().itemCount,
                           itemBuilder: (context, index) {
-                            HomeScreen.addedCardIndex = index;
                             return TaskCard(
                               taskTitle: context
                                   .read<TaskCardDataProvider>()
@@ -391,11 +390,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     inactiveColor: Colors.white70,
                     height: height * 0.1,
                     icons: iconList,
-                    activeIndex: selectedIndex,
+                    activeIndex: context
+                        .read<PageViewManagementProvider>()
+                        .getSelectedIndex,
                     onTap: (index) {
-                      setState(() {
-                        selectedIndex = index;
-                      });
+                      context
+                          .read<PageViewManagementProvider>()
+                          .setCurrentPageIndex(index);
                       index == 1
                           ? Navigator.pushNamed(context, DeleteTaskScreen.id)
                           : Navigator.pushNamed(context, HomeScreen.id);

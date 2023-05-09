@@ -33,8 +33,7 @@ class DatabaseHelper {
   }
 
   static Future<void> insert(TaskCardModel taskCard) async {
-    await _db?.insert(_tableName, taskCard.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    await _db?.insert(_tableName, taskCard.toMap());
   }
 
   static Future<List<Map<String, dynamic>>> query() async {

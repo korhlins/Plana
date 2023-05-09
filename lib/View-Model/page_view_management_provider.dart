@@ -5,6 +5,7 @@ class PageViewManagementProvider extends ChangeNotifier {
   int currentPageIndex = 0;
   Views currentPage = Views.todo;
   int selectedDate = DateTime.now().day;
+  int selectedIndex = 0;
 
   int get getSelectedDate {
     return selectedDate;
@@ -18,8 +19,17 @@ class PageViewManagementProvider extends ChangeNotifier {
     return currentPage;
   }
 
+  int get getSelectedIndex {
+    return selectedIndex;
+  }
+
   void setSelectdDate(int date) {
     selectedDate = date;
+    notifyListeners();
+  }
+
+  void setSelectedIndex(int index) {
+    selectedIndex = index;
     notifyListeners();
   }
 
