@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Date_Utils.DateUtils.daysInMonth(DateTime.now()).last)
         .toList();
     context.read<TaskCardDataProvider>().refreshTasks();
+    HomeScreen.cardId = null;
   }
 
   @override
@@ -363,7 +364,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .task[index]
                                   .endTime,
                               updateFunction: () async {
-                                HomeScreen.selectedIndex = index;
                                 cardDetails = await DatabaseHelper.query();
                                 HomeScreen.cardId = cardDetails[index]["id"];
                                 Navigator.pushNamed(context, AddTaskScreen.id);
@@ -411,6 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       FloatingActionButtonLocation.centerDocked,
                   floatingActionButton: FloatingActionButton(
                     onPressed: () {
+                      print("its all good here!");
                       Navigator.pushNamed(context, AddTaskScreen.id);
                     },
                     child: const Icon(Icons.add),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../View/screen/add_task_screen.dart';
+
 class TaskCardModel {
   int id;
   String startTime;
@@ -9,6 +11,7 @@ class TaskCardModel {
   String taskTitle;
   String taskDescription;
   String date;
+  String? taskNature;
 
   TaskCardModel(
       {required this.id,
@@ -18,7 +21,8 @@ class TaskCardModel {
       required this.cardTextTitleColor,
       required this.cardColor,
       required this.taskDescription,
-      required this.date});
+      required this.date,
+      required this.taskNature});
 
   Map<String, dynamic> toMap() {
     return {
@@ -29,7 +33,8 @@ class TaskCardModel {
       "endTime": endTime,
       "date": date,
       "cardColor": cardColor.value,
-      "cardTextTitleColor": cardTextTitleColor.value
+      "cardTextTitleColor": cardTextTitleColor.value,
+      "taskNature": taskNature
     };
   }
 

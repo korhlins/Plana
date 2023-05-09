@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plana/Model/task_card_model.dart';
+import 'package:plana/View/screen/add_task_screen.dart';
 import 'package:plana/View/utilities/Date_Utillities.dart';
 import '../Services/local_database.dart';
 
@@ -59,7 +60,8 @@ class TaskCardDataProvider extends ChangeNotifier {
             taskTitle: cardDetails[index]["taskTitle"],
             cardTextTitleColor: Color(cardDetails[index]["cardTextTitleColor"]),
             cardColor: Color(cardDetails[index]["cardColor"]),
-            taskDescription: cardDetails[index]["taskDescription"]));
+            taskDescription: cardDetails[index]["taskDescription"],
+            taskNature: cardDetails[index]["taskNature"]));
     notifyListeners();
   }
 
@@ -107,7 +109,8 @@ class TaskCardDataProvider extends ChangeNotifier {
             taskTitle: cardDetails[index]["taskTitle"],
             cardTextTitleColor: Color(cardDetails[index]["cardTextTitleColor"]),
             cardColor: Color(cardDetails[index]["cardColor"]),
-            taskDescription: cardDetails[index]["taskDescription"]));
+            taskDescription: cardDetails[index]["taskDescription"],
+            taskNature: cardDetails[index]["taskNature"]));
     print(task.length);
     notifyListeners();
   }

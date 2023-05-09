@@ -25,6 +25,7 @@ class DatabaseHelper {
       date TEXT,
       cardColor INTEGER,
       cardTextTitleColor INTEGER,
+      taskNature TEXT,
       createAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)""");
       });
     } catch (e) {

@@ -20,7 +20,7 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  TaskNatureList? taskNature;
+  String? taskNature;
   TextEditingController titleTextController = TextEditingController();
   TextEditingController noteTextController = TextEditingController();
   String startTime = '';
@@ -35,12 +35,16 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         final updatingItem = await DatabaseHelper.getItem(cardId);
         titleTextController.text = updatingItem[0]["taskTitle"];
         noteTextController.text = updatingItem[0]["taskDescription"];
-        startTime = updatingItem[0]["startTime"];
-        endTime = updatingItem[0]["endTime"];
-        selectedDate = updatingItem[0]["date"];
         context
             .read<TaskCardDataProvider>()
-            .setCardBorderColor(updatingItem[0]["cardTextTitleColor"]);
+            .setStartTime(updatingItem[0]["startTime"]);
+        context
+            .read<TaskCardDataProvider>()
+            .setEndTime(updatingItem[0]["endTime"]);
+        context
+            .read<TaskCardDataProvider>()
+            .setDate(updatingItem[0]["selectedDate"]);
+        taskNature = updatingItem[0]["taskNature"];
       } catch (e) {
         print(e);
       }
@@ -181,14 +185,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'Family',
                       onTap: () {
-                        taskNature = TaskNatureList.family;
+                        taskNature = TaskNatureList.family.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFDDF5F6),
                             cardTextTitleColor: const Color(0xFF61DDE2));
                       },
                       textColor: const Color(0xFF61DDE2),
                       backgroundColor: const Color(0xFFDDF5F6),
-                      borderColor: taskNature == TaskNatureList.family
+                      borderColor: taskNature == TaskNatureList.family.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFDDF5F6),
                     ),
@@ -198,14 +202,15 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'Entertainment',
                       onTap: () {
-                        taskNature = TaskNatureList.entertainment;
+                        taskNature = TaskNatureList.entertainment.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFFAE3DD),
                             cardTextTitleColor: const Color(0xFFFCA696));
                       },
                       textColor: const Color(0xFFFCA696),
                       backgroundColor: const Color(0xFFFAE3DD),
-                      borderColor: taskNature == TaskNatureList.entertainment
+                      borderColor: taskNature ==
+                              TaskNatureList.entertainment.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFFAE3DD),
                     ),
@@ -215,14 +220,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'Study',
                       onTap: () {
-                        taskNature = TaskNatureList.study;
+                        taskNature = TaskNatureList.study.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFEAF2FF),
                             cardTextTitleColor: Colors.blueAccent);
                       },
                       textColor: Colors.blueAccent,
                       backgroundColor: const Color(0xFFEAF2FF),
-                      borderColor: taskNature == TaskNatureList.study
+                      borderColor: taskNature == TaskNatureList.study.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFEAF2FF),
                     ),
@@ -232,14 +237,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'Work',
                       onTap: () {
-                        taskNature = TaskNatureList.work;
+                        taskNature = TaskNatureList.work.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFFAE3DD),
                             cardTextTitleColor: const Color(0xFFFCA696));
                       },
                       textColor: const Color(0xFFFCA696),
                       backgroundColor: const Color(0xFFFAE3DD),
-                      borderColor: taskNature == TaskNatureList.work
+                      borderColor: taskNature == TaskNatureList.work.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFFAE3DD),
                     ),
@@ -249,14 +254,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'Personal',
                       onTap: () {
-                        taskNature = TaskNatureList.personal;
+                        taskNature = TaskNatureList.personal.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFEAF2FF),
                             cardTextTitleColor: Colors.blueAccent);
                       },
                       textColor: Colors.blueAccent,
                       backgroundColor: const Color(0xFFEAF2FF),
-                      borderColor: taskNature == TaskNatureList.personal
+                      borderColor: taskNature == TaskNatureList.personal.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFEAF2FF),
                     ),
@@ -264,14 +269,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     SmallCard(
                       cardChild: 'class',
                       onTap: () {
-                        taskNature = TaskNatureList.Class;
+                        taskNature = TaskNatureList.Class.name;
                         context.read<TaskCardDataProvider>().setColor(
                             cardBackgroundColor: const Color(0xFFDDF5F6),
                             cardTextTitleColor: const Color(0xFF61DDE2));
                       },
                       textColor: const Color(0xFF61DDE2),
                       backgroundColor: const Color(0xFFDDF5F6),
-                      borderColor: taskNature == TaskNatureList.Class
+                      borderColor: taskNature == TaskNatureList.Class.name
                           ? context.watch<TaskCardDataProvider>().getBorderColor
                           : const Color(0xFFDDF5F6),
                     ),
@@ -343,7 +348,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             cardColor:
                                 context.read<TaskCardDataProvider>().cardColor!,
                             taskDescription: noteTextController.text,
-                            date: selectedDate));
+                            date: selectedDate,
+                            taskNature: taskNature));
                         context.read<TaskCardDataProvider>().resetDateTime();
                         context.read<TaskCardDataProvider>().addToTaskList();
                         Navigator.pushNamed(context, HomeScreen.id);
@@ -359,7 +365,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             cardColor:
                                 context.read<TaskCardDataProvider>().cardColor!,
                             taskDescription: noteTextController.text,
-                            date: selectedDate));
+                            date: selectedDate,
+                            taskNature: taskNature));
                         Navigator.pushNamed(context, HomeScreen.id);
                       }
                     },
