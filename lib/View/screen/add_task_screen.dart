@@ -35,6 +35,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         final updatingItem = await DatabaseHelper.getItem(cardId);
         titleTextController.text = updatingItem[0]["taskTitle"];
         noteTextController.text = updatingItem[0]["taskDescription"];
+        taskNature = updatingItem[0]["taskNature"];
+        context
+            .read<TaskCardDataProvider>()
+            .setCardBorderColor(updatingItem[0]["cardTextTitleColor"]);
         context
             .read<TaskCardDataProvider>()
             .setStartTime(updatingItem[0]["startTime"]);
@@ -44,7 +48,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         context
             .read<TaskCardDataProvider>()
             .setDate(updatingItem[0]["selectedDate"]);
-        taskNature = updatingItem[0]["taskNature"];
       } catch (e) {
         print(e);
       }
@@ -356,17 +359,27 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       } else {
                         DatabaseHelper.update(TaskCardModel(
                             id: cardId!,
-                            startTime: startTime,
-                            endTime: endTime,
+                            startTime: context
+                                .read<TaskCardDataProvider>()
+                                .getPickedStartTime,
+                            endTime: context
+                                .read<TaskCardDataProvider>()
+                                .getPickedEndTime,
                             taskTitle: titleTextController.text,
+                            taskDescription: noteTextController.text,
                             cardTextTitleColor: context
                                 .read<TaskCardDataProvider>()
                                 .getBorderColor,
                             cardColor:
                                 context.read<TaskCardDataProvider>().cardColor!,
-                            taskDescription: noteTextController.text,
-                            date: selectedDate,
+                            date: context
+                                .read<TaskCardDataProvider>()
+                                .getPickedDate,
                             taskNature: taskNature));
+                        print(context
+                            .read<TaskCardDataProvider>()
+                            .getBorderColor);
+                        context.read<TaskCardDataProvider>().resetDateTime();
                         Navigator.pushNamed(context, HomeScreen.id);
                       }
                     },

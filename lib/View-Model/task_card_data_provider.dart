@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:plana/Model/task_card_model.dart';
-import 'package:plana/View/screen/add_task_screen.dart';
 import 'package:plana/View/utilities/Date_Utillities.dart';
 import '../Services/local_database.dart';
 
@@ -69,11 +68,14 @@ class TaskCardDataProvider extends ChangeNotifier {
     startTime = DateUtillities().getTimeFormat(0, 0);
     endTime = DateUtillities().getTimeFormat(0, 0);
     date = DateUtillities().getDateFormat(0, 0, 0);
+    cardColor = Colors.transparent;
+    cardBorderColor = Colors.transparent;
     notifyListeners();
   }
 
   void setCardBorderColor(Color cardBorderOutlineColor) {
     cardBorderColor = cardBorderOutlineColor;
+    notifyListeners();
   }
 
   void setStartTime(String pickedStartTime) {

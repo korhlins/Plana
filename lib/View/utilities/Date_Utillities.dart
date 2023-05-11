@@ -49,7 +49,7 @@ class DateUtillities {
     return "${getHours(hours)} : ${getMinutes(minutes)} ${hours >= 12 ? "PM" : "AM"}";
   }
 
-  String getDateFormat(int day, int month, int year) {
+  String getDateFormat(int day, month, year) {
     String getDay(int day) {
       return day < 10 ? "0$day" : day.toString();
     }
