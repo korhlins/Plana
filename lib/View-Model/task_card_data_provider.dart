@@ -93,7 +93,7 @@ class TaskCardDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setColor({Color? cardBackgroundColor, cardTextTitleColor}) {
+  void setColor({Color? cardBackgroundColor, Color? cardTextTitleColor}) {
     cardColor = cardBackgroundColor;
     cardBorderColor = cardTextTitleColor;
     notifyListeners();

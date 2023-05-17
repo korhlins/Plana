@@ -37,7 +37,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         noteTextController.text = updatingItem[0]["taskDescription"];
         taskNature = updatingItem[0]["taskNature"];
 
-        if (context.mounted) return;
+        context.read<TaskCardDataProvider>().setColor(
+            cardBackgroundColor: Color(updatingItem[0]["cardColor"]),
+            cardTextTitleColor: Color(updatingItem[0]["cardTextTitleColor"]));
+
         context
             .read<TaskCardDataProvider>()
             .setStartTime(updatingItem[0]["startTime"]);
