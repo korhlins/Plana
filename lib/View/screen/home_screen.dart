@@ -371,7 +371,41 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                         ),
-                        Text('data'),
+                        SingleChildScrollView(
+                          child: ListView.builder(
+                            itemBuilder: (BuildContext context, int index) {
+                              if (true) {
+                                TaskCard(
+                                  taskTitle: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .taskTitle,
+                                  taskDescription: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .taskDescription,
+                                  cardColor: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .cardColor,
+                                  cardTextTitleColor: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .cardTextTitleColor,
+                                  startTime: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .startTime,
+                                  endTime: context
+                                      .read<TaskCardDataProvider>()
+                                      .task[index]
+                                      .endTime,
+                                  updateFunction: () {},
+                                );
+                              }
+                            },
+                          ),
+                        ),
                         Text('data')
                       ],
                     ),
