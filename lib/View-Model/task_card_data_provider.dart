@@ -73,11 +73,6 @@ class TaskCardDataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setCardBorderColor(Color cardBorderOutlineColor) {
-    cardBorderColor = cardBorderOutlineColor;
-    notifyListeners();
-  }
-
   void setStartTime(String pickedStartTime) {
     startTime = pickedStartTime;
     notifyListeners();

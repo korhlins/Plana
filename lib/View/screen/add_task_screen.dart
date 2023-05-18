@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plana/Model/task_card_model.dart';
 import 'package:plana/View/utilities/media_Query.dart';
-import 'package:plana/View/components/small_card.dart';
 import 'package:plana/View/components/set_dateTime_container.dart';
 import 'package:plana/View/utilities/Date_Utillities.dart';
 import 'package:plana/View/components/large_button.dart';
@@ -9,8 +8,10 @@ import 'package:plana/View/screen/home_screen.dart';
 import 'package:plana/View-Model/task_card_data_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:plana/Services/local_database.dart';
-
-enum TaskNatureList { family, entertainment, study, work, personal, Class }
+import '../components/add_task_textfields.dart';
+import '../components/set_time_widget.dart';
+import '../components/task_list_pageView.dart';
+import '../components/task_nature_buttons.dart';
 
 class AddTaskScreen extends StatefulWidget {
   static const String id = 'addTaskScreen';
@@ -33,8 +34,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     if (cardId != null) {
       try {
         final updatingItem = await DatabaseHelper.getItem(cardId);
-        titleTextController.text = updatingItem[0]["taskTitle"];
-        noteTextController.text = updatingItem[0]["taskDescription"];
+        titleTextController = updatingItem[0]["taskTitle"];
+        noteTextController = updatingItem[0]["taskDescription"];
         taskNature = updatingItem[0]["taskNature"];
 
         context.read<TaskCardDataProvider>().setColor(
@@ -60,7 +61,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    cardId = HomeScreen.cardId;
+    cardId = TaskListPageView.selectedCardId;
     getData();
   }
 
@@ -108,218 +109,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SizedBox(
                     height: height * 0.04,
                   ),
-                  Text(
-                    'Title',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: height * 0.02,
-                    ),
+                  AddTaskTextFields(
+                    height: height,
+                    noteTextController: noteTextController,
+                    titleTextController: titleTextController,
                   ),
                   SizedBox(
                     height: height * 0.02,
                   ),
-                  TextField(
-                    controller: titleTextController,
-                    enableSuggestions: true,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFF2F6FF),
-                      hintText: 'Add your title',
-                      hintStyle: const TextStyle(
-                        color: Colors.black12,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(height * 0.05),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(height * 0.05),
-                      ),
-                    ),
-                  ),
+                  TaskNatureButtons(width: width, taskNature: taskNature),
                   SizedBox(
                     height: height * 0.02,
                   ),
-                  Text(
-                    'Note',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: height * 0.02,
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  TextField(
-                    maxLines: 4,
-                    maxLength: 250,
-                    controller: noteTextController,
-                    enableSuggestions: true,
-                    textAlign: TextAlign.start,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: const Color(0xFFF2F6FF),
-                      hintText: 'Add your note',
-                      hintStyle: const TextStyle(
-                        color: Colors.black12,
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(height * 0.05),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.white,
-                        ),
-                        borderRadius: BorderRadius.circular(height * 0.05),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  Wrap(direction: Axis.horizontal, children: [
-                    SmallCard(
-                      cardChild: 'Family',
-                      onTap: () {
-                        taskNature = TaskNatureList.family.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFDDF5F6),
-                            cardTextTitleColor: const Color(0xFF61DDE2));
-                      },
-                      textColor: const Color(0xFF61DDE2),
-                      backgroundColor: const Color(0xFFDDF5F6),
-                      borderColor: taskNature == TaskNatureList.family.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFDDF5F6),
-                    ),
-                    SizedBox(
-                      width: width * 0.02,
-                    ),
-                    SmallCard(
-                      cardChild: 'Entertainment',
-                      onTap: () {
-                        taskNature = TaskNatureList.entertainment.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFFAE3DD),
-                            cardTextTitleColor: const Color(0xFFFCA696));
-                      },
-                      textColor: const Color(0xFFFCA696),
-                      backgroundColor: const Color(0xFFFAE3DD),
-                      borderColor: taskNature ==
-                              TaskNatureList.entertainment.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFFAE3DD),
-                    ),
-                    SizedBox(
-                      width: width * 0.02,
-                    ),
-                    SmallCard(
-                      cardChild: 'Study',
-                      onTap: () {
-                        taskNature = TaskNatureList.study.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFEAF2FF),
-                            cardTextTitleColor: Colors.blueAccent);
-                      },
-                      textColor: Colors.blueAccent,
-                      backgroundColor: const Color(0xFFEAF2FF),
-                      borderColor: taskNature == TaskNatureList.study.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFEAF2FF),
-                    ),
-                    SizedBox(
-                      width: width * 0.02,
-                    ),
-                    SmallCard(
-                      cardChild: 'Work',
-                      onTap: () {
-                        taskNature = TaskNatureList.work.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFFAE3DD),
-                            cardTextTitleColor: const Color(0xFFFCA696));
-                      },
-                      textColor: const Color(0xFFFCA696),
-                      backgroundColor: const Color(0xFFFAE3DD),
-                      borderColor: taskNature == TaskNatureList.work.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFFAE3DD),
-                    ),
-                    SizedBox(
-                      width: width * 0.02,
-                    ),
-                    SmallCard(
-                      cardChild: 'Personal',
-                      onTap: () {
-                        taskNature = TaskNatureList.personal.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFEAF2FF),
-                            cardTextTitleColor: Colors.blueAccent);
-                      },
-                      textColor: Colors.blueAccent,
-                      backgroundColor: const Color(0xFFEAF2FF),
-                      borderColor: taskNature == TaskNatureList.personal.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFEAF2FF),
-                    ),
-                    SizedBox(width: width * 0.02),
-                    SmallCard(
-                      cardChild: 'class',
-                      onTap: () {
-                        taskNature = TaskNatureList.Class.name;
-                        context.read<TaskCardDataProvider>().setColor(
-                            cardBackgroundColor: const Color(0xFFDDF5F6),
-                            cardTextTitleColor: const Color(0xFF61DDE2));
-                      },
-                      textColor: const Color(0xFF61DDE2),
-                      backgroundColor: const Color(0xFFDDF5F6),
-                      borderColor: taskNature == TaskNatureList.Class.name
-                          ? context.watch<TaskCardDataProvider>().getBorderColor
-                          : const Color(0xFFDDF5F6),
-                    ),
-                  ]),
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  Row(children: [
-                    SetDateTimeContainer(
-                      label: 'Start Time',
-                      onConfirm: (date) {
-                        startTime = DateUtillities()
-                            .getTimeFormat(date.hour, date.minute);
-                        context
-                            .read<TaskCardDataProvider>()
-                            .setStartTime(startTime);
-                      },
-                      dateTime: context
-                          .watch<TaskCardDataProvider>()
-                          .getPickedStartTime,
-                    ),
-                    SizedBox(
-                      width: width * 0.08,
-                    ),
-                    SetDateTimeContainer(
-                      label: 'End Time',
-                      onConfirm: (date) {
-                        endTime = DateUtillities()
-                            .getTimeFormat(date.hour, date.minute);
-                        context
-                            .read<TaskCardDataProvider>()
-                            .setEndTime(endTime);
-                      },
-                      dateTime: context
-                          .watch<TaskCardDataProvider>()
-                          .getPickedEndTime,
-                    ),
-                  ]),
+                  set_start_and_end_time_widget(context, width),
                   SizedBox(
                     height: height * 0.02,
                   ),
