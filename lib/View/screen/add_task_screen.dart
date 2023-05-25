@@ -121,7 +121,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   SizedBox(
                     height: height * 0.02,
                   ),
-                  set_start_and_end_time_widget(context, width),
+                  SetStartAndEndTimeWidget(width: width),
                   SizedBox(
                     height: height * 0.02,
                   ),

@@ -21,7 +21,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _auth = FirebaseAuth.instance;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  // bool passwordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     SizedBox(
                       height: height * 0.07,
                     ),
+                    Form(child: Container()),
                     Text(
                       "Welcome!",
                       style: TextStyle(
