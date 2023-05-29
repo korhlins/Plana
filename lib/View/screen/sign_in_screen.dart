@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:plana/View/utilities/media_Query.dart';
 import 'package:plana/View/components/Text_Link.dart';
-import 'package:plana/View/components/Text_fields.dart';
 import 'package:plana/View/components/large_button.dart';
 import 'package:plana/View/screen/Sign_up_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:plana/View/screen/home_screen.dart';
 import 'package:modal_progress_hud_alt/modal_progress_hud_alt.dart';
-import 'package:plana/View-Model/sign_in_provider.dart';
+
 import 'package:provider/provider.dart';
+
+import '../../View-Model/sign_in_provider.dart';
 
 class SignInScreen extends StatefulWidget {
   static const String id = 'SignInScreen';
@@ -20,7 +21,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   bool isClicked = false;
-  final _auth = FirebaseAuth.instance;
+
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -37,12 +38,12 @@ class _SignInScreenState extends State<SignInScreen> {
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
-            child: SingleChildScrollView(
-              physics: ClampingScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.all(height * 0.04),
-                child: Form(
-                  key: _formKey,
+            child: Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                physics: ClampingScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.all(height * 0.04),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -70,9 +71,23 @@ class _SignInScreenState extends State<SignInScreen> {
                         height: height * 0.038,
                       ),
                       TextFormField(
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           labelText: "Email",
                           hintText: "kelvin@email.com",
+                          hintStyle: const TextStyle(
+                            color: Colors.black26,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF2F6FF)),
+                            borderRadius: BorderRadius.circular(height * 0.02),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F6FF),
+                            ),
+                            borderRadius: BorderRadius.circular(height * 0.02),
+                          ),
                         ),
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
@@ -119,6 +134,20 @@ class _SignInScreenState extends State<SignInScreen> {
                                   .toggleVisibility();
                             },
                           ),
+                          hintStyle: const TextStyle(
+                            color: Colors.black26,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                const BorderSide(color: Color(0xFFF2F6FF)),
+                            borderRadius: BorderRadius.circular(height * 0.02),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color(0xFFF2F6FF),
+                            ),
+                            borderRadius: BorderRadius.circular(height * 0.02),
+                          ),
                         ),
                         controller: passwordController,
                         keyboardType: TextInputType.emailAddress,
@@ -149,26 +178,6 @@ class _SignInScreenState extends State<SignInScreen> {
                             context
                                 .read<SignInAndOutProvider>()
                                 .setSpinnerAction(true);
-                            try {
-                              final user =
-                                  await _auth.signInWithEmailAndPassword(
-                                      email: emailController.text,
-                                      password: passwordController.text);
-                              if (user != null) {
-                                context
-                                    .read<SignInAndOutProvider>()
-                                    .setSpinnerAction(false);
-                              }
-                              context
-                                  .read<SignInAndOutProvider>()
-                                  .setSpinnerAction(false);
-                              Navigator.pushNamed(context, HomeScreen.id);
-                            } catch (e) {
-                              Navigator.pushNamed(context, SignUpScreen.id);
-                              context
-                                  .read<SignInAndOutProvider>()
-                                  .setSpinnerAction(false);
-                            }
                           }),
                       SizedBox(
                         height: height * 0.01,
