@@ -3,12 +3,10 @@ import 'package:plana/View/utilities/media_Query.dart';
 import 'package:plana/View/components/Text_Link.dart';
 import 'package:plana/View/components/large_button.dart';
 import 'package:plana/View/screen/Sign_up_screen.dart';
-
+import 'package:plana/Services/firebase_methods.dart';
 import 'package:plana/View/screen/home_screen.dart';
 import 'package:modal_progress_hud_alt/modal_progress_hud_alt.dart';
-
 import 'package:provider/provider.dart';
-
 import '../../View-Model/sign_in_provider.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -102,22 +100,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       SizedBox(
                         height: height * 0.038,
                       ),
-                      // TextFields(
-                      //   hintText: 'Password',
-                      //   controller: passwordController,
-                      //   passwordVisible: ,
-                      //   suffixIcon: IconButton(
-                      //     color: Colors.black26,
-                      //     icon: Icon(context
-                      //             .watch<SignInAndOutProvider>()
-                      //             .getPasswordVisibility
-                      //         ? Icons.visibility_off
-                      //         : Icons.visibility),
-                      //     onPressed: () {
-                      //
-                      //     },
-                      //   ),
-                      // ),
                       TextFormField(
                         decoration: InputDecoration(
                           labelText: "Password",
@@ -178,6 +160,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             context
                                 .read<SignInAndOutProvider>()
                                 .setSpinnerAction(true);
+                            FirebaseMethods().signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text);
+                            context
+                                .read<SignInAndOutProvider>()
+                                .setSpinnerAction(false);
                           }),
                       SizedBox(
                         height: height * 0.01,
@@ -191,10 +179,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                           TextLink(
                               text: ' sign up',
-                              onTap: () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => SignUpScreen())),
+                              onTap: () =>
+                                  Navigator.pushNamed(context, SignUpScreen.id),
                               decoration: TextDecoration.underline)
                         ],
                       ),

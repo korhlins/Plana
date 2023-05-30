@@ -5,8 +5,6 @@ import 'package:plana/View/components/Text_fields.dart';
 import 'package:plana/View/components/large_button.dart';
 import 'package:plana/View/screen/sign_in_screen.dart';
 import 'package:plana/View/screen/home_screen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:plana/View-Model/sign_in_provider.dart';
 import 'package:modal_progress_hud_alt/modal_progress_hud_alt.dart';
@@ -20,7 +18,6 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController controller = TextEditingController();
-  final _auth = FirebaseAuth.instance;
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -89,30 +86,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     inputText: 'Create account',
                     onPress: () async {
                       FocusScope.of(context).focusedChild?.unfocus();
-                      context
-                          .read<SignInAndOutProvider>()
-                          .setUserName(controller.text);
-                      context
-                          .read<SignInAndOutProvider>()
-                          .setSpinnerAction(true);
-                      try {
-                        final newUser =
-                            await _auth.createUserWithEmailAndPassword(
-                                email: emailController.text,
-                                password: passwordController.text);
-
-                        if (newUser != null) {
-                          context
-                              .read<SignInAndOutProvider>()
-                              .setSpinnerAction(false);
-                          Navigator.pushNamed(context, HomeScreen.id);
-                        }
-                      } catch (e) {
-                        context
-                            .read<SignInAndOutProvider>()
-                            .setSpinnerAction(false);
-                        Navigator.pushNamed(context, SignUpScreen.id);
-                      }
                     },
                   ),
                   SizedBox(
