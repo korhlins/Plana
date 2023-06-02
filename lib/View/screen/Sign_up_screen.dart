@@ -17,6 +17,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController controller = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -31,85 +32,135 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: ModalProgressHUD(
         inAsyncCall: context.watch<SignInAndOutProvider>().getSpinnerAction,
         child: SafeArea(
-          child: SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Padding(
-              padding: EdgeInsets.all(height * 0.04),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: height * 0.02,
-                  ),
-                  CircleAvatar(
-                    radius: height * 0.1,
-                  ),
-                  TextFields(
-                    hintText: 'Username',
-                    passwordVisible: false,
-                    controller: usernameController,
-                  ),
-                  SizedBox(
-                    height: height * 0.038,
-                  ),
-                  TextFields(
-                    hintText: 'Email',
-                    passwordVisible: false,
-                    inputTextType: TextInputType.emailAddress,
-                    controller: emailController,
-                  ),
-                  SizedBox(
-                    height: height * 0.038,
-                  ),
-                  TextFields(
-                    hintText: 'password',
-                    controller: passwordController,
-                    passwordVisible: context
-                        .watch<SignInAndOutProvider>()
-                        .getPasswordVisibility,
-                    suffixIcon: IconButton(
-                      color: Colors.black26,
-                      icon: Icon(context
-                              .watch<SignInAndOutProvider>()
-                              .getPasswordVisibility
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                      onPressed: () {
-                        context.read<SignInAndOutProvider>().toggleVisibility();
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              physics: ClampingScrollPhysics(),
+              child: Padding(
+                padding: EdgeInsets.all(height * 0.04),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: height * 0.02,
+                    ),
+                    CircleAvatar(
+                      radius: height * 0.1,
+                    ),
+                    TextFields(
+                      hintText: 'Username',
+                      passwordVisible: false,
+                      controller: usernameController,
+                    ),
+                    SizedBox(
+                      height: height * 0.038,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Email",
+                        hintText: "kelvin@email.com",
+                        hintStyle: const TextStyle(
+                          color: Colors.black26,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF2F6FF)),
+                          borderRadius: BorderRadius.circular(height * 0.02),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F6FF),
+                          ),
+                          borderRadius: BorderRadius.circular(height * 0.02),
+                        ),
+                      ),
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (inputText) {
+                        return inputText!.isNotEmpty && inputText.contains("@")
+                            ? null
+                            : "email address incorrect";
                       },
                     ),
-                  ),
-                  SizedBox(
-                    height: height * 0.038,
-                  ),
-                  LargeButton(
-                    inputText: 'Create account',
-                    onPress: () async {
-                      FocusScope.of(context).focusedChild?.unfocus();
-                    },
-                  ),
-                  SizedBox(
-                    height: height * 0.01,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        "Already have an account?",
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                    SizedBox(
+                      height: height * 0.038,
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        hintText: "*******",
+                        suffixIcon: IconButton(
+                          icon: Icon(context
+                                  .watch<SignInAndOutProvider>()
+                                  .getPasswordVisibility
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () {
+                            context
+                                .read<SignInAndOutProvider>()
+                                .toggleVisibility();
+                          },
+                        ),
+                        hintStyle: const TextStyle(
+                          color: Colors.black26,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              const BorderSide(color: Color(0xFFF2F6FF)),
+                          borderRadius: BorderRadius.circular(height * 0.02),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color(0xFFF2F6FF),
+                          ),
+                          borderRadius: BorderRadius.circular(height * 0.02),
+                        ),
                       ),
-                      TextLink(
-                          text: ' sign in',
-                          onTap: () => {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignInScreen()))
-                              },
-                          decoration: TextDecoration.underline)
-                    ],
-                  )
-                ],
+                      controller: passwordController,
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: !context
+                          .read<SignInAndOutProvider>()
+                          .getPasswordVisibility,
+                      validator: (String? passwordInput) {
+                        return passwordInput!.isNotEmpty &&
+                                passwordInput.length < 6
+                            ? "password must  contain a least 6 characters"
+                            : null;
+                      },
+                    ),
+                    SizedBox(
+                      height: height * 0.038,
+                    ),
+                    LargeButton(
+                      inputText: 'Create account',
+                      onPress: () async {
+                        FocusScope.of(context).focusedChild?.unfocus();
+                      },
+                    ),
+                    SizedBox(
+                      height: height * 0.01,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Already have an account?",
+                          style: TextStyle(fontWeight: FontWeight.w500),
+                        ),
+                        TextLink(
+                            text: ' sign in',
+                            onTap: () => {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignInScreen()))
+                                },
+                            decoration: TextDecoration.underline)
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),
